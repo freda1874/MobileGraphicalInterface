@@ -27,7 +27,29 @@
         android:layout_marginBottom="68dp"
         android:text="@string/button_message"
         android:id="@+id/mybutton"
-         />
+    />
+    <!-- CheckBox -->
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you drink coffee?"
+        android:id="@+id/checkBox"
+        />
 
+    <!-- Switch -->
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you drink coffee?"
+        android:id="@+id/switch1"
+        />
+
+    <!-- RadioButton -->
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you drink coffee?"
+        android:id="@+id/radioButton"
+        />
 
 </LinearLayout >

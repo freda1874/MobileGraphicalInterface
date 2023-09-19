@@ -4,16 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.Switch;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 import algonquin.cst2335.data.MainViewModel;
 import algonquin.cst2335.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-private ActivityMainBinding variableBinding;
+    private ActivityMainBinding variableBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,18 +24,28 @@ private ActivityMainBinding variableBinding;
 
         MainViewModel model = new ViewModelProvider(this).get(MainViewModel.class);
 
-//        TextView textview = findViewById(R.id.textview);
-//        TextView textview =variableBinding.textview;
-
-        // Observe changes in the MutableLiveData
-        model.editString.observe(this, s ->{
-
-
+        // Observe changes in the MutableLiveData for the EditText and TextView
+        model.editString.observe(this, s -> {
+            // Do something with the string here, if needed
         });
 
-//variableBinding.textview.setText(model.editString);
-variableBinding.mybutton.setOnClickListener(click -> {
+        // Observe changes in the drinksCoffee MutableLiveData
+        model.drinksCoffee.observe(this, selected -> {
+            variableBinding.checkBox.setChecked(selected);
+            variableBinding.switch1.setChecked(selected);
+            variableBinding.radioButton.setChecked(selected);
+
+            Toast.makeText(this, "The value is now: " + selected, Toast.LENGTH_SHORT).show();
+        });
+
+        // Set up OnClickListener for the EditText and TextView
+        variableBinding.mybutton.setOnClickListener(click -> {
             model.editString.postValue(variableBinding.myedittext.getText().toString());
-
         });
-}}
+
+        // Registering the CompoundButton listeners
+        variableBinding.checkBox.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
+        variableBinding.switch1.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
+        variableBinding.radioButton.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
+    }
+}
