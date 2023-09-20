@@ -40,12 +40,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up OnClickListener for the EditText and TextView
         variableBinding.mybutton.setOnClickListener(click -> {
+
+            int width = variableBinding.mybutton.getWidth();
+            int height = variableBinding.mybutton.getHeight();
+
+            Toast.makeText(this, "The width = " + width + " and height = " + height, Toast.LENGTH_SHORT).show();
+
+
             model.editString.postValue(variableBinding.myedittext.getText().toString());
+        });
+// Accessing ImageView using ViewBinding
+        variableBinding.myImageView.setImageResource(R.drawable.algonquin);
+
+// You can also set onClickListener if needed
+        variableBinding.myImageView.setOnClickListener(v -> {
+            // Do something
         });
 
         // Registering the CompoundButton listeners
         variableBinding.checkBox.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
         variableBinding.switch1.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
         variableBinding.radioButton.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
+
     }
 }

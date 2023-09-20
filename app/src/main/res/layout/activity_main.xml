@@ -51,5 +51,10 @@
         android:text="Do you drink coffee?"
         android:id="@+id/radioButton"
         />
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/algonquin"
+        android:id="@+id/myImageView"
+    />
 </LinearLayout >
