@@ -23,11 +23,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(variableBinding.getRoot());
 
         MainViewModel model = new ViewModelProvider(this).get(MainViewModel.class);
-
-        // Observe changes in the MutableLiveData for the EditText and TextView
         model.editString.observe(this, s -> {
-            // Do something with the string here, if needed
+            variableBinding.myedittext.setText(s);
         });
+
+        variableBinding.mybutton.setOnClickListener(click -> {
+            model.editString.postValue(variableBinding.myedittext.getText().toString());
+            variableBinding.textview.setText("Your edit text has: " + variableBinding.myedittext.getText().toString());
+        });
+
+
 
         // Observe changes in the drinksCoffee MutableLiveData
         model.drinksCoffee.observe(this, selected -> {
@@ -39,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set up OnClickListener for the EditText and TextView
-        variableBinding.mybutton.setOnClickListener(click -> {
+        variableBinding.myimagebutton.setOnClickListener(click -> {
 
-            int width = variableBinding.mybutton.getWidth();
-            int height = variableBinding.mybutton.getHeight();
+            int width = variableBinding.myimagebutton.getWidth();
+            int height = variableBinding.myimagebutton.getHeight();
 
             Toast.makeText(this, "The width = " + width + " and height = " + height, Toast.LENGTH_SHORT).show();
 
@@ -52,10 +57,7 @@ public class MainActivity extends AppCompatActivity {
 // Accessing ImageView using ViewBinding
         variableBinding.myImageView.setImageResource(R.drawable.algonquin);
 
-// You can also set onClickListener if needed
-        variableBinding.myImageView.setOnClickListener(v -> {
-            // Do something
-        });
+
 
         // Registering the CompoundButton listeners
         variableBinding.checkBox.setOnCheckedChangeListener((btn, selected) -> model.drinksCoffee.postValue(selected));
