@@ -4,48 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="48dp"
+    android:layout_marginTop="27dp"
+    android:layout_marginRight="48dp"
+    android:layout_marginBottom="27dp"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/flagview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/button5"
+        android:layout_marginTop="204dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1"
         app:srcCompat="@drawable/flag" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:nextFocusLeft="@id/button3"
+        android:nextFocusRight="@id/button2"
+
+        android:nextFocusDown="@id/spin_switch"
         android:text="@string/button1"
         android:textColorHighlight="#FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
+        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:nextFocusLeft="@id/button1"
+        android:nextFocusRight="@id/button3"
+
+        android:nextFocusDown="@id/spin_switch"
         android:text="@string/button2"
-        app:layout_constraintBottom_toBottomOf="@+id/button5"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
+
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button5" />
+        app:layout_constraintStart_toEndOf="@+id/button1" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:layout_marginTop="59dp"
+        android:layout_marginBottom="204dp"
+        android:nextFocusLeft="@id/button2"
+        android:nextFocusRight="@id/button1"
+
+        android:nextFocusDown="@id/spin_switch"
         android:text="@string/button3"
-        app:layout_constraintBottom_toBottomOf="@+id/button6"
+        app:layout_constraintBottom_toTopOf="@+id/flagview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button6" />
+        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/spin_switch"
@@ -57,4 +79,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/flagview"
         app:layout_constraintVertical_bias="0.365" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
