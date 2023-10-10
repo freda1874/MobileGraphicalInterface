@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+<!--    This just says that your application requires a camera so don't install it on devices that don't have a camera.-->
+
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
+<!--    ask the user's permission for calling-->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LeiLuoApplication"
         tools:targetApi="31">
+
+        <activity
+            android:name=".SecondActivity"
+            android:exported="true"
+            android:label="@string/title_activity_second"
+            android:theme="@style/Theme.LeiLuoApplication" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
