@@ -20,7 +20,8 @@ import org.junit.runner.RunWith;
 
 
 /**
- * This class is responsible for testing the functionality of the password complexity
+ * This class is responsible for testing the functionality of the passwords
+ * complexity
  * check in the MainActivity class.
  *
  * @author Lei Luo
@@ -157,7 +158,7 @@ MainActivityTest {
 
     /**
      * This test method inputs a password is complex enough and checks
-     * if the correct error message "You shall not pass!" is displayed.
+     * if the correct message "Your password meets the requirements" is displayed.
      */
     @Test
     public void testPasswordComplexEnough() {
