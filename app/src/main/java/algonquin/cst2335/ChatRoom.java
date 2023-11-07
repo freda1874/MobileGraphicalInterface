@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +16,9 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.databinding.ReceiveMessageBinding;
@@ -24,6 +29,8 @@ public class ChatRoom extends AppCompatActivity {
     ArrayList<ChatMessage> messages = new ArrayList<>();
     ChatRoomViewModel chatModel;
     private RecyclerView.Adapter myAdapter;
+
+    ChatMessageDAO mDAO;
 
     /**
      * This method is called when the activity is first created.
@@ -39,10 +46,21 @@ public class ChatRoom extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
+
+//get data from ViewModel
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         // Get messages from ViewModel
         messages = chatModel.messages.getValue();
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
+
+        //load message from database
+        MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "database-name").build();
+        mDAO = db.cmDAO();//get a DAO object to interact with database
+
+        //load all messages from database
+        List<ChatMessage> fromDatabase=mDAO.getAllMessages();//return an
+        // arraylist
+
 
         if (messages == null) {
             messages = new ArrayList<>();
@@ -66,7 +84,18 @@ public class ChatRoom extends AppCompatActivity {
 
                 //clear the previous text:
                 binding.textInput.setText("");
-//                myAdapter.notifyDataSetChanged();
+                myAdapter.notifyDataSetChanged();
+
+                //add to database on another thread
+                Executor thread = Executors.newSingleThreadExecutor();
+                /*this runs in another thread*/
+                thread.execute(() -> {
+                    chatMessage.Id = mDAO.insertMessage(chatMessage);//get the id from
+                    // database
+                    Log.d("TAG","The id created is:" +chatMessage.Id);
+                });
+
+
             }
         });
 
@@ -96,10 +125,10 @@ public class ChatRoom extends AppCompatActivity {
 
                         if (viewType == 0) {
                             SentMessageBinding binding =
-                                    SentMessageBinding.inflate(getLayoutInflater(),parent,false);
+                                    SentMessageBinding.inflate(getLayoutInflater(), parent, false);
                             return new MyRowHolder(binding.getRoot(), viewType);
                         } else {
-                            ReceiveMessageBinding binding = ReceiveMessageBinding.inflate(getLayoutInflater(),parent,false);
+                            ReceiveMessageBinding binding = ReceiveMessageBinding.inflate(getLayoutInflater(), parent, false);
                             return new MyRowHolder(binding.getRoot(), viewType);
                         }
 
@@ -144,6 +173,7 @@ public class ChatRoom extends AppCompatActivity {
         TextView messageText;
         TextView timeText;
         int viewType;
+
         /**
          * Constructs a MyRowHolder with the specified itemView.
          *
@@ -164,8 +194,6 @@ public class ChatRoom extends AppCompatActivity {
                 timeText = itemView.findViewById(R.id.receiveTime);
             }
         }
-
-
 
 
     }

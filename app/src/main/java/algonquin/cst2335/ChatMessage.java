@@ -14,23 +14,23 @@ public class ChatMessage {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public long Id;
-    @ColumnInfo(name = "message")
+    @ColumnInfo(name = "messageColumn")
     protected String message;
 
 
 
-    @ColumnInfo(name = "timeSent")
+    @ColumnInfo(name = "timeSentColumn")
     protected String timeSent;
 
-    @ColumnInfo(name = "sentOrReceive")
+    @ColumnInfo(name = "sentOrReceiveColumn")
     protected boolean isSentButton;
 
+    public ChatMessage(){}
 
-
-    public ChatMessage(String m, String tm, boolean sr) {
-        message = m;
-        timeSent = tm;
-        isSentButton = sr;
+    public ChatMessage(String messageColumn, String timeSentColumn, boolean sentOrReceiveColumn) {
+        message = messageColumn;
+        timeSent = timeSentColumn;
+        isSentButton = sentOrReceiveColumn;
     }
 
     public String getMessage() {
