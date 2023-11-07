@@ -34,11 +34,12 @@ public class ChatRoom extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
-
         // Get messages from ViewModel
         messages = chatModel.messages.getValue();
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -65,6 +66,7 @@ public class ChatRoom extends AppCompatActivity {
 
                 //clear the previous text:
                 binding.textInput.setText("");
+//                myAdapter.notifyDataSetChanged();
             }
         });
 
@@ -90,15 +92,14 @@ public class ChatRoom extends AppCompatActivity {
 
                     //        onCreateViewHolder function is responsible for creating a layout
 //        for a row, and setting the TextViews in code
-                    public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent,
-
-                                                          int viewType) {
+                    public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                         if (viewType == 0) {
-                            SentMessageBinding binding = SentMessageBinding.inflate(getLayoutInflater());
+                            SentMessageBinding binding =
+                                    SentMessageBinding.inflate(getLayoutInflater(),parent,false);
                             return new MyRowHolder(binding.getRoot(), viewType);
                         } else {
-                            ReceiveMessageBinding binding = ReceiveMessageBinding.inflate(getLayoutInflater());  // You need to create this layout
+                            ReceiveMessageBinding binding = ReceiveMessageBinding.inflate(getLayoutInflater(),parent,false);
                             return new MyRowHolder(binding.getRoot(), viewType);
                         }
 
@@ -108,7 +109,8 @@ public class ChatRoom extends AppCompatActivity {
                     @Override
 
 
-                    //        The function onBindViewHolder is where you set the objects in your layout for the row. Right now, your MyRowHolder class has two TextView objects. The onBindViewHolder() function is meant to set the data for your ViewHolder object that will go at row position in the list
+                    //        The function onBindViewHolder is where you set the objects in your layout for the row. Right now, your MyRowHolder class has two TextView objects.
+                    //        The onBindViewHolder() function is meant to set the data for your ViewHolder object that will go at row position in the list
                     public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
 
                         ChatMessage chatMessage = messages.get(position);
@@ -151,7 +153,7 @@ public class ChatRoom extends AppCompatActivity {
         public MyRowHolder(@NonNull View itemView, int viewType) {
             super(itemView);
 
-            this.viewType = viewType;  // Correct this line
+            this.viewType = viewType;
 
             // Depending on the viewType, find the appropriate TextViews
             if (this.viewType == 0) {
@@ -163,15 +165,7 @@ public class ChatRoom extends AppCompatActivity {
             }
         }
 
-        /**
-         * Returns the number of chat messages.
-         *
-         * @return The number of chat messages.
-         */
-        int getItemCount() {
-            int size = messages.size();
-            return size;
-        }
+
 
 
     }
