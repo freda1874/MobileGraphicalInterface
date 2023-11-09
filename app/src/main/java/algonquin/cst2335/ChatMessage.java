@@ -33,16 +33,5 @@ public class ChatMessage {
         isSentButton = sentOrReceiveColumn;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public String getTimeSent() {
-        return timeSent;
-    }
-
-    public boolean isSentButton() {
-        return isSentButton;
-    }
 }
 
