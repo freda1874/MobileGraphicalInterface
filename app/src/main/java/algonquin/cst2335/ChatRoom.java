@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -58,7 +58,7 @@ public class ChatRoom extends AppCompatActivity {
         mDAO = db.cmDAO();//get a DAO object to interact with database
 
         //load all messages from database
-        List<ChatMessage> fromDatabase=mDAO.getAllMessages();//return an
+        List<ChatMessage> fromDatabase = mDAO.getAllMessages();//return an
         // arraylist
 
 
@@ -84,7 +84,7 @@ public class ChatRoom extends AppCompatActivity {
 
                 //clear the previous text:
                 binding.textInput.setText("");
-                myAdapter.notifyDataSetChanged();
+
 
                 //add to database on another thread
                 Executor thread = Executors.newSingleThreadExecutor();
@@ -92,11 +92,11 @@ public class ChatRoom extends AppCompatActivity {
                 thread.execute(() -> {
                     chatMessage.Id = mDAO.insertMessage(chatMessage);//get the id from
                     // database
-                    Log.d("TAG","The id created is:" +chatMessage.Id);
-//                    runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
+//                    Log.d("TAG","The id created is:" +chatMessage.Id);
+                    runOnUiThread(() -> binding.recycleView.setAdapter(myAdapter)); //You can then load the RecyclerView
                 });
 
-
+                myAdapter.notifyDataSetChanged();
             }
         });
 
@@ -178,22 +178,50 @@ public class ChatRoom extends AppCompatActivity {
         /**
          * Constructs a MyRowHolder with the specified itemView.
          *
-         * @param itemView The view for this row holder.
+         * @param entireRow The view for this row holder.
          * @param viewType
          */
-        public MyRowHolder(@NonNull View itemView, int viewType) {
-            super(itemView);
+        public MyRowHolder(@NonNull View entireRow, int viewType) {
+            super(entireRow);
+            entireRow.setOnClickListener(clk -> {
 
-            this.viewType = viewType;
+                // tell you which row (position) this row is currently in the adapter object
+                int position = getAbsoluteAdapterPosition();
+                // alert dialog to ask if you want to do this first.
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+                builder.setMessage("Do you want to delete the messsage: " + messageText.getText());
+                //To set the title of the alert dialog
+                builder.setTitle("Question:");
+                //The AlertDialog gives you two buttons to use, a positive button, and a negative button
+//                Clicking on the No shouldn't delete anything so just leave that lambda function empty
+                builder.setPositiveButton("No", ((dialog, cl) -> {
+                }));
+                builder.setNegativeButton("yes", ((dialog, cl) -> {
+                    ChatMessage m = messages.get(position);
 
-            // Depending on the viewType, find the appropriate TextViews
-            if (this.viewType == 0) {
-                messageText = itemView.findViewById(R.id.messageText);
-                timeText = itemView.findViewById(R.id.timeText);
-            } else {
-                messageText = itemView.findViewById(R.id.receiveText);
-                timeText = itemView.findViewById(R.id.receiveTime);
-            }
+                    //add to database on another thread
+                    Executor thread = Executors.newSingleThreadExecutor();
+                    /*this runs in another thread*/
+                    thread.execute(() -> {
+                        mDAO.deleteMessage(m);//get the id from
+                        // database
+//                    Log.d("TAG","The id created is:" +chatMessage.Id);
+                        runOnUiThread(() -> binding.recycleView.setAdapter(myAdapter)); //You can then load the RecyclerView
+                    });
+
+
+                    mDAO.deleteMessage(m);//delete from database
+                    messages.remove(position);//delete from arraylist
+                    myAdapter.notifyDataSetChanged();//redraw all the list
+
+                })).create().show();
+
+            });
+
+
+            messageText = itemView.findViewById(R.id.messageText);
+            timeText = itemView.findViewById(R.id.timeText);
+
         }
 
 
