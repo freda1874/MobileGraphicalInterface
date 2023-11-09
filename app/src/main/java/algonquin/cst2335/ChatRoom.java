@@ -93,6 +93,7 @@ public class ChatRoom extends AppCompatActivity {
                     chatMessage.Id = mDAO.insertMessage(chatMessage);//get the id from
                     // database
                     Log.d("TAG","The id created is:" +chatMessage.Id);
+//                    runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
                 });
 
 
