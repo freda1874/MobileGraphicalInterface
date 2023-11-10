@@ -150,9 +150,9 @@ public class ChatRoom extends AppCompatActivity {
                 int rowNum = getAbsoluteAdapterPosition();//which row this is
                 ChatMessage toDelete = theMessages.get(rowNum);
                 AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
-
-                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
                 builder.setMessage("Do you want to delete this message?");
+                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
+
                 builder.setTitle("Delete");
 
                 builder.setPositiveButton("Yes", (p1, p2)-> {
@@ -178,8 +178,7 @@ public class ChatRoom extends AppCompatActivity {
 
                                 theMessages.add(rowNum, toDelete);
                                 myAdapter.notifyDataSetChanged();//redraw the list
-                            })
-                            .show();
+                            }).show();
                 });
 
                 builder.create().show(); //this has to be last

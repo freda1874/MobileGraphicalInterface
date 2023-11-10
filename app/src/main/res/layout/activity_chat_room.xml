@@ -20,11 +20,11 @@
     <EditText
         android:id="@+id/newMessage"
         android:layout_width="171dp"
-        android:layout_height="47dp"
-
+        android:layout_height="48dp"
         android:layout_marginBottom="24dp"
         android:ems="10"
         android:inputType="text"
+        android:text="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/receiveButton"
         app:layout_constraintHorizontal_bias="1.0"
@@ -33,7 +33,7 @@
     <Button
         android:id="@+id/addSomething"
         android:layout_width="109dp"
-        android:layout_height="46dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
     <Button
         android:id="@+id/receiveButton"
         android:layout_width="109dp"
-        android:layout_height="46dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:text="Receive"
