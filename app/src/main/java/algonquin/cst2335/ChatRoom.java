@@ -195,7 +195,7 @@ public class ChatRoom extends AppCompatActivity {
                 builder.setTitle("Delete");
 
 
-                builder.setPositiveButton("yes", ((p1, p2) -> {
+                builder.setPositiveButton("yes", (p1, p2) -> {
                     //add to database on another thread
                     Executor thread = Executors.newSingleThreadExecutor();
                     /*this runs in another thread*/
