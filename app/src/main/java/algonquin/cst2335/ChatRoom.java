@@ -72,7 +72,7 @@ public class ChatRoom extends AppCompatActivity {
         //end of loading from database
 
 
-//        E means day of the week, and having 4 EEEE means write the whole word of day of the week
+
         binding.sendButton.setOnClickListener(click -> {
             String textInput = binding.textInput.getText().toString();
 
@@ -101,6 +101,33 @@ public class ChatRoom extends AppCompatActivity {
             }); //the body of run()
         });
 
+
+        binding.receiveButton.setOnClickListener(click -> {
+            String textInput = binding.textInput.getText().toString();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+            String currentDateandTime = sdf.format(new Date());
+
+            // Create a ChatMessage object with isSentButton as false for the Receive button
+            ChatMessage thisMessage = new ChatMessage(textInput, currentDateandTime, true);
+
+            theMessages.add(thisMessage);
+
+            //clear the previous text:
+            binding.textInput.setText("");
+            //tell the recycle view to update:
+            myAdapter.notifyDataSetChanged();//will redraw
+
+
+            // add to database on another thread:
+            Executor thread1 = Executors.newSingleThreadExecutor();
+            thread1.execute(() -> {
+                //this is on a background thread
+                thisMessage.Id = mDao.insertMessage(thisMessage); //get the
+                // ID from the database
+                Log.d("TAG", "The id created is:" + thisMessage.Id);
+            }); //the body of run()
+        });
         binding.recycleView.setAdapter(myAdapter =
                 new RecyclerView.Adapter<MyRowHolder>() {
                     @NonNull
@@ -169,12 +196,13 @@ public class ChatRoom extends AppCompatActivity {
         TextView message;
         TextView time;
 
+        TextView messageReceive;
+        TextView timeReceive;
 
         /**
          * Constructs a MyRowHolder with the specified itemView.
          *
          * @param entireRow The view for this row holder.
-
          */
         public MyRowHolder(@NonNull View entireRow) {
             super(entireRow);
@@ -190,26 +218,26 @@ public class ChatRoom extends AppCompatActivity {
                 //The AlertDialog gives you two buttons to use, a positive button, and a negative button
 //                Clicking on the No shouldn't delete anything so just leave that lambda function empty
 
-                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
+                builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
                 builder.setMessage("Do you want to delete this message?");
                 builder.setTitle("Delete");
 
 
-                builder.setPositiveButton("yes", ((p1, p2) -> {
+                builder.setPositiveButton("yes", (p1, p2) -> {
                     //add to database on another thread
                     Executor thread = Executors.newSingleThreadExecutor();
                     /*this runs in another thread*/
                     thread.execute(() -> {
                         mDao.deleteMessage(toDelete);//get the id from
-                           });
+                    });
                     theMessages.remove(position);//remove from the array list
                     myAdapter.notifyDataSetChanged();//redraw the list
 
 //give feedback:anything on screen
-                    Snackbar.make( itemView , "You deleted the row", Snackbar.LENGTH_LONG)
+                    Snackbar.make(itemView, "You deleted the row", Snackbar.LENGTH_LONG)
                             .setAction("Undo", (btn) -> {
                                 Executor thread2 = Executors.newSingleThreadExecutor();
-                                thread2.execute(( ) -> {
+                                thread2.execute(() -> {
                                     mDao.insertMessage(toDelete);
                                 });
 
@@ -220,13 +248,16 @@ public class ChatRoom extends AppCompatActivity {
                             .show();
 
                 });
-                    builder.create().show(); //this has to be last
+                builder.create().show(); //this has to be last
 
             });
 
 
-                message = itemView.findViewById(R.id.messageText);
-                time = itemView.findViewById(R.id.timeText); //find the ids from XML to java
+            message = itemView.findViewById(R.id.messageText);
+            time = itemView.findViewById(R.id.timeText); //find the ids from XML to java
+
+            messageReceive = itemView.findViewById(R.id.receiveText);
+            timeReceive = itemView.findViewById(R.id.receiveTime); //find the ids from XML to java
 
         }
 
