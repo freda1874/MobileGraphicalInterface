@@ -31,4 +31,6 @@ public class ChatMessage {
         timeSent = tm;
         sentOrReceive = sr;
     }
+
+
 }
