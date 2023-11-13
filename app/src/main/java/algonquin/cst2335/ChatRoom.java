@@ -86,24 +86,6 @@ public class ChatRoom extends AppCompatActivity {
             }); //the body of run()
         });
 
-        binding.receiveButton.setOnClickListener( click ->{
-            String newMessage = binding.newMessage.getText().toString();
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
-            String currentDateandTime = sdf.format(new Date());
-            ChatMessage thisMessage = new ChatMessage(newMessage, currentDateandTime, true);
-            theMessages.add(thisMessage);
-            binding.newMessage.setText("");//remove what you typed
-            //tell the recycle view to update:
-            myAdapter.notifyDataSetChanged();//will redraw
-
-            // add to database on another thread:
-            Executor thread1 = Executors.newSingleThreadExecutor();
-            thread1.execute(( ) -> {
-                //this is on a background thread
-                thisMessage.id = mDao.insertMessage(thisMessage); //get the ID from the database
-                Log.d("TAG", "The id created is:" + thisMessage.id);
-            }); //the body of run()
-        });
 
         binding.myRecyclerView.setAdapter(
                 myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
@@ -115,19 +97,22 @@ public class ChatRoom extends AppCompatActivity {
 
                         if(viewType == 0) {
                             SentRowBinding rowBinding = SentRowBinding.inflate(getLayoutInflater(), parent, false);
-                            return new MyRowHolder(rowBinding.getRoot(),viewType);
-                            //call your constructor below
+                            return new MyRowHolder(rowBinding.getRoot()); //call your constructor below
                         }
                         else {  //after row 3
                             ReceiveRowBinding rowBinding = ReceiveRowBinding.inflate(getLayoutInflater(), parent, false);
-                            return new MyRowHolder(rowBinding.getRoot(),viewType);
+                            return new MyRowHolder(rowBinding.getRoot());
                         }
                     }
 
                     @Override
                     public int getItemViewType(int position) {
-                        ChatMessage chatMessage = theMessages.get(position);
-                        return chatMessage.sentOrReceive ? 0 : 1;
+                        //given the row, return an layout id for that row
+
+                        if(position < 3)
+                            return 0;
+                        else
+                            return 1;
                     }
 
                     @Override
@@ -155,24 +140,11 @@ public class ChatRoom extends AppCompatActivity {
     //this represents a single row on the list
     class MyRowHolder extends RecyclerView.ViewHolder {
 
-        public    int viewType;
         public TextView message;
         public TextView time;
-        public MyRowHolder(@NonNull View itemView,int viewType) {
+        public MyRowHolder(@NonNull View itemView) {
             super(itemView);
-            this.viewType = viewType;
             //like onCreate above
-
-
-
-            // Depending on the viewType, find the appropriate TextViews
-            if (this.viewType == 0) {
-                message = itemView.findViewById(R.id.messageS);
-                time = itemView.findViewById(R.id.timeS);
-            } else {
-                message = itemView.findViewById(R.id.messageR);
-                time = itemView.findViewById(R.id.timeR);
-            }
 
             itemView.setOnClickListener( click -> {
                 int rowNum = getAbsoluteAdapterPosition();//which row this is
@@ -194,6 +166,7 @@ public class ChatRoom extends AppCompatActivity {
                     theMessages.remove(rowNum);//remove from the array list
                     myAdapter.notifyDataSetChanged();//redraw the list
 
+
                     //give feedback:anything on screen
                     Snackbar.make( itemView , "You deleted the row", Snackbar.LENGTH_LONG)
                             .setAction("Undo", (btn) -> {
@@ -201,6 +174,8 @@ public class ChatRoom extends AppCompatActivity {
                                 thread2.execute(( ) -> {
                                     mDao.insertMessage(toDelete);
                                 });
+
+
                                 theMessages.add(rowNum, toDelete);
                                 myAdapter.notifyDataSetChanged();//redraw the list
                             }).show();
@@ -209,6 +184,8 @@ public class ChatRoom extends AppCompatActivity {
                 builder.create().show(); //this has to be last
             });
 
+            message = itemView.findViewById(R.id.message);
+            time = itemView.findViewById(R.id.time); //find the ids from XML to java
         }
     }
 }
