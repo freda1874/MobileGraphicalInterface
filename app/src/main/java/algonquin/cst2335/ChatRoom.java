@@ -57,7 +57,11 @@ public class ChatRoom extends AppCompatActivity {
         theMessages = chatModel.theMessages;
 
 
-        MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "fileOnYourPhone").build();
+        MessageDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        MessageDatabase.class,
+                        "fileOnYourPhone")
+                .fallbackToDestructiveMigration()
+                .build();
         //load message from database
         mDao = db.cmDAO();//get a DAO object to interact with database
 
