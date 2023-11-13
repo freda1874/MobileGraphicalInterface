@@ -51,7 +51,12 @@ public class ChatRoom extends AppCompatActivity {
         theMessages = chatModel.theMessages;
 
         //load messages from the database:
-        MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "fileOnYourPhone").build();
+        MessageDatabase db = Room.databaseBuilder(getApplicationContext(),
+                        MessageDatabase.class,
+                        "fileOnYourPhone")
+                .fallbackToDestructiveMigration()
+                .build();
+
 
         //intialize the variable
         mDao = db.cmDAO(); //get a DAO object to interact with the database
@@ -78,8 +83,8 @@ public class ChatRoom extends AppCompatActivity {
             myAdapter.notifyDataSetChanged();//will redraw
 
             // add to database on another thread:
-            Executor thread1 = Executors.newSingleThreadExecutor();
-            thread1.execute(( ) -> {
+            Executor threadNew = Executors.newSingleThreadExecutor();
+            threadNew.execute(( ) -> {
                 //this is on a background thread
                 thisMessage.id = mDao.insertMessage(thisMessage); //get the ID from the database
                 Log.d("TAG", "The id created is:" + thisMessage.id);
@@ -150,9 +155,9 @@ public class ChatRoom extends AppCompatActivity {
                 int rowNum = getAbsoluteAdapterPosition();//which row this is
                 ChatMessage toDelete = theMessages.get(rowNum);
                 AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
-
-                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
                 builder.setMessage("Do you want to delete this message?");
+                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
+
                 builder.setTitle("Delete");
 
                 builder.setPositiveButton("Yes", (p1, p2)-> {
@@ -166,7 +171,6 @@ public class ChatRoom extends AppCompatActivity {
                     theMessages.remove(rowNum);//remove from the array list
                     myAdapter.notifyDataSetChanged();//redraw the list
 
-
                     //give feedback:anything on screen
                     Snackbar.make( itemView , "You deleted the row", Snackbar.LENGTH_LONG)
                             .setAction("Undo", (btn) -> {
@@ -174,17 +178,13 @@ public class ChatRoom extends AppCompatActivity {
                                 thread2.execute(( ) -> {
                                     mDao.insertMessage(toDelete);
                                 });
-
-
                                 theMessages.add(rowNum, toDelete);
                                 myAdapter.notifyDataSetChanged();//redraw the list
-                            })
-                            .show();
+                            }).show();
                 });
 
                 builder.create().show(); //this has to be last
             });
-
             message = itemView.findViewById(R.id.message);
             time = itemView.findViewById(R.id.time); //find the ids from XML to java
         }
