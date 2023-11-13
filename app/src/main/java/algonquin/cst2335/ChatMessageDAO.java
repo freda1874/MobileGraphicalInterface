@@ -9,7 +9,6 @@ import androidx.room.Query;
 import java.util.List;
 @Dao
 public interface ChatMessageDAO {
-
     @Insert //id                 //@Entity
     public long insertMessage(ChatMessage m); //for inserting, long is the new id
 
