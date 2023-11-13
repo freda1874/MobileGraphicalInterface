@@ -11,26 +11,27 @@ import androidx.room.PrimaryKey;
 @Entity //mapping variables to columns
 public class ChatMessage {
 
-    @PrimaryKey(autoGenerate = true) //the database will increment them for us
-    @ColumnInfo(name="id")
-    long id;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public long Id;
+    @ColumnInfo(name = "messageColumn")
+    protected String message;
 
 
-    @ColumnInfo(name="MessageColumn")
-    String message;
-    @ColumnInfo(name="TimeSentColumn")
-    String timeSent;
 
-    @ColumnInfo(name="SendRecieveColumn")
-    boolean sentOrReceive;
+    @ColumnInfo(name = "timeSentColumn")
+    protected String timeSent;
 
+    @ColumnInfo(name = "sentOrReceiveColumn")
+    protected boolean isSentButton;
 
-    public ChatMessage() { }
-    public ChatMessage(String m, String tm, boolean sr){
-        message= m;
-        timeSent = tm;
-        sentOrReceive = sr;
+    public ChatMessage(){}
+
+    public ChatMessage(String messageColumn, String timeSentColumn, boolean sentOrReceiveColumn) {
+        message = messageColumn;
+        timeSent = timeSentColumn;
+        isSentButton = sentOrReceiveColumn;
     }
 
-
 }
+

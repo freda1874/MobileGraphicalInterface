@@ -9,13 +9,15 @@ import androidx.room.Query;
 import java.util.List;
 @Dao
 public interface ChatMessageDAO {
+    @Insert
+    public long insertMessage(ChatMessage m);//inserting, long is the id
 
-    @Insert //id                 //@Entity
-    public long insertMessage(ChatMessage m); //for inserting, long is the new id
+    @Query( "Select * from ChatMessage;")//the SQL query
+    public List<ChatMessage> getAllMessages();
 
-    @Query("Select * from ChatMessage;")//the SQL search
-    public List<ChatMessage> getAllMessages();//for query
+    //number of rows deleted
+    @Delete
+    void deleteMessage(ChatMessage m);//delete the message
 
-    @Delete //number of rows deleted
-    public int deleteThisMessage(ChatMessage m); //delete this message  by id
+
 }

@@ -7,10 +7,10 @@
     tools:context=".ChatRoom">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myRecyclerView"
+        android:id="@+id/recycleView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/newMessage"
+        app:layout_constraintBottom_toTopOf="@+id/textInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,22 +18,22 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/newMessage"
+        android:id="@+id/textInput"
         android:layout_width="171dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="47dp"
+
+        android:layout_marginBottom="24dp"
         android:ems="10"
         android:inputType="text"
-        android:text="tpye here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/receiveButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/addSomething" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/sendButton" />
 
     <Button
-        android:id="@+id/addSomething"
+        android:id="@+id/sendButton"
         android:layout_width="109dp"
-        android:layout_height="48dp"
+        android:layout_height="46dp"
         android:layout_marginBottom="16dp"
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
     <Button
         android:id="@+id/receiveButton"
         android:layout_width="109dp"
-        android:layout_height="48dp"
+        android:layout_height="46dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:text="Receive"
