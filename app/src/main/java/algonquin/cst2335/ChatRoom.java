@@ -56,7 +56,7 @@ public class ChatRoom extends AppCompatActivity {
         chatModel.selectedMessage.observe(this, newSelected -> {
             MessageDetailsFragment newFragment=new MessageDetailsFragment(newSelected);
            //to load fragments
-           getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLocation,newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
+           getSupportFragmentManager().beginTransaction().addToBackStack("").replace(R.id.fragmentLocation,newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
         });
         theMessages = chatModel.theMessages;
