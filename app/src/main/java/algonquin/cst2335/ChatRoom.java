@@ -2,6 +2,8 @@ package algonquin.cst2335;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,9 +55,8 @@ public class ChatRoom extends AppCompatActivity {
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         chatModel.selectedMessage.observe(this, newSelected -> {
             MessageDetailsFragment newFragment=new MessageDetailsFragment(newSelected);
-            String message=newSelected.message;
-            String time=newSelected.timeSent;
-
+           //to load fragments
+           getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLocation,newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
         });
         theMessages = chatModel.theMessages;
