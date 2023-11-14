@@ -105,6 +105,36 @@ public class ChatRoom extends AppCompatActivity {
             }); //the body of run()
         });
 
+        binding.receiveButton.setOnClickListener(click -> {
+            String textInput = binding.textInput.getText().toString();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+            String currentDateandTime = sdf.format(new Date());
+
+            // Create a ChatMessage object with isSentButton as false for the Receive button
+            ChatMessage thisMessage = new ChatMessage(textInput,
+                    currentDateandTime, false);
+
+            theMessages.add(thisMessage);
+
+
+            //clear the previous text:
+            binding.textInput.setText("");
+            //tell the recycle view to update:
+            myAdapter.notifyDataSetChanged();//will redraw
+
+
+            // add to database on another thread:
+            Executor thread1 = Executors.newSingleThreadExecutor();
+            thread1.execute(() -> {
+                //this is on a background thread
+                thisMessage.Id = mDao.insertMessage(thisMessage); //get the
+                // ID from the database
+                Log.d("TAG", "The id created is:" + thisMessage.Id);
+            }); //the body of run()
+        });
+
+
         binding.recycleView.setAdapter(myAdapter =
                 new RecyclerView.Adapter<MyRowHolder>() {
                     @NonNull
