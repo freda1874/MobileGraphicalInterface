@@ -28,6 +28,7 @@ import algonquin.cst2335.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.databinding.ReceiveRowBinding;
 
 import algonquin.cst2335.databinding.SentRowBinding;
+import algonquin.cst2335.ui.MessageDetailsFragment;
 
 public class ChatRoom extends AppCompatActivity {
 
@@ -39,6 +40,8 @@ public class ChatRoom extends AppCompatActivity {
     //Declare the dao here:
     ChatMessageDAO mDao;
 
+    ChatRoomViewModel chatModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +50,14 @@ public class ChatRoom extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         //get the data from the ViewModel:
-        ChatRoomViewModel chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+        chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+        chatModel.selectedMessage.observe(this, newSelected -> {
+            MessageDetailsFragment newFragment=new MessageDetailsFragment(newSelected);
+            String message=newSelected.message;
+            String time=newSelected.timeSent;
+
+
+        });
         theMessages = chatModel.theMessages;
 
         //load messages from the database:
@@ -153,15 +163,22 @@ public class ChatRoom extends AppCompatActivity {
 
             itemView.setOnClickListener( click -> {
                 int rowNum = getAbsoluteAdapterPosition();//which row this is
-                ChatMessage toDelete = theMessages.get(rowNum);
-                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+
+                ChatMessage selected = theMessages.get(rowNum);
+                chatModel.selectedMessage.postValue(selected);
+              /*
+
+
+               AlertDialog.Builder builder =
+
+                        new AlertDialog.Builder( ChatRoom.this );
                 builder.setMessage("Do you want to delete this message?");
-                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
+                builder.setNegativeButton("No" , (btn, obj)->{   }  );
 
                 builder.setTitle("Delete");
 
                 builder.setPositiveButton("Yes", (p1, p2)-> {
-                    /*is yes is clicked*/
+
                     Executor thread1 = Executors.newSingleThreadExecutor();
                     thread1.execute(( ) -> {
                         //delete from database
@@ -184,6 +201,7 @@ public class ChatRoom extends AppCompatActivity {
                 });
 
                 builder.create().show(); //this has to be last
+            */
             });
             message = itemView.findViewById(R.id.message);
             time = itemView.findViewById(R.id.time); //find the ids from XML to java

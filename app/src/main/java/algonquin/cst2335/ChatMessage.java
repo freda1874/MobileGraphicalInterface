@@ -14,16 +14,16 @@ public class ChatMessage {
 
     @PrimaryKey(autoGenerate = true) //the database will increment them for us
     @ColumnInfo(name="id")
-    long id;
+   public long id;
 
 
     @ColumnInfo(name="MessageColumn")
-    String message;
+    public String message;
     @ColumnInfo(name="TimeSentColumn")
-    String timeSent;
+    public String timeSent;
 
     @ColumnInfo(name="SendRecieveColumn")
-    boolean sentOrReceive;
+    public  boolean sentOrReceive;
 
 
     public ChatMessage() { }
