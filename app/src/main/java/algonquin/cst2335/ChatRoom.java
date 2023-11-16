@@ -35,6 +35,7 @@ public class ChatRoom extends AppCompatActivity {
 
     ChatMessageDAO mDao;
 
+
     /**
      * This method is called when the activity is first created.
      * It initializes the UI components and sets up the click listeners.
@@ -52,17 +53,22 @@ public class ChatRoom extends AppCompatActivity {
 
         //get data from ViewModel
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+        chatModel.selectedMessage.observe(this, newSelected -> {MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
+            //to load fragments
+            getSupportFragmentManager().beginTransaction().addToBackStack("").replace(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
+
+        });
 
         // Get messages from ViewModel
         theMessages = chatModel.theMessages;
 
-
+        //load messages from the database:
         MessageDatabase db = Room.databaseBuilder(getApplicationContext(),
                         MessageDatabase.class,
                         "fileOnYourPhone")
                 .fallbackToDestructiveMigration()
                 .build();
-        //load message from database
+        //intialize the variable
         mDao = db.cmDAO();//get a DAO object to interact with database
 
         //load all messages from database:
@@ -208,7 +214,6 @@ public class ChatRoom extends AppCompatActivity {
          * Constructs a MyRowHolder with the specified itemView.
          *
          * @param entireRow The view for this row holder.
-
          */
         public MyRowHolder(@NonNull View entireRow) {
             super(entireRow);
