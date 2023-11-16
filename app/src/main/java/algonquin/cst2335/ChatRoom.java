@@ -84,7 +84,7 @@ public class ChatRoom extends AppCompatActivity {
 
 //        E means day of the week, and having 4 EEEE means write the whole word of day of the week
         binding.sendButton.setOnClickListener(click -> {
-            String textInput = binding.textInput.getText().toString();
+            String textInput = binding.messageText.getText().toString();
 
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
@@ -96,7 +96,7 @@ public class ChatRoom extends AppCompatActivity {
 
 
             //clear the previous text:
-            binding.textInput.setText("");
+            binding.messageText.setText("");
             //tell the recycle view to update:
             myAdapter.notifyDataSetChanged();//will redraw
 
@@ -112,7 +112,7 @@ public class ChatRoom extends AppCompatActivity {
         });
 
         binding.receiveButton.setOnClickListener(click -> {
-            String textInput = binding.textInput.getText().toString();
+            String textInput = binding.messageText.getText().toString();
 
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
@@ -125,7 +125,7 @@ public class ChatRoom extends AppCompatActivity {
 
 
             //clear the previous text:
-            binding.textInput.setText("");
+            binding.messageText.setText("");
             //tell the recycle view to update:
             myAdapter.notifyDataSetChanged();//will redraw
 
@@ -170,12 +170,8 @@ public class ChatRoom extends AppCompatActivity {
                      * @return 0 for messages sent using the send button, 1 for messages received.
                      */
                     public int getItemViewType(int position) {
-                        //given the row, return an layout id for that row
-
-                        if (position < 3)
-                            return 0;
-                        else
-                            return 1;
+                        ChatMessage chatMessage = theMessages.get(position);
+                        return chatMessage.isSentButton ? 0 : 1;
                     }
 
                     @Override
