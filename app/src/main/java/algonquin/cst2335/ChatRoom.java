@@ -218,43 +218,41 @@ public class ChatRoom extends AppCompatActivity {
                 int position = getAbsoluteAdapterPosition();
                 ChatMessage toDelete = theMessages.get(position);
                 // alert dialog to ask if you want to do this first.
-                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
-
-
-                //The AlertDialog gives you two buttons to use, a positive button, and a negative button
-//                Clicking on the No shouldn't delete anything so just leave that lambda function empty
-
-                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
-                builder.setMessage("Do you want to delete this message?");
-                builder.setTitle("Delete");
-
-
-                builder.setPositiveButton("yes", (p1, p2) -> {
-                    //add to database on another thread
-                    Executor thread = Executors.newSingleThreadExecutor();
-                    /*this runs in another thread*/
-                    thread.execute(() -> {
-                        mDao.deleteMessage(toDelete);//get the id from
-                    });
-                    theMessages.remove(position);//remove from the array list
-                    myAdapter.notifyDataSetChanged();//redraw the list
-
-//give feedback:anything on screen
-                    Snackbar.make( itemView , "You deleted the row", Snackbar.LENGTH_LONG)
-                            .setAction("Undo", (btn) -> {
-                                Executor thread2 = Executors.newSingleThreadExecutor();
-                                thread2.execute(( ) -> {
-                                    mDao.insertMessage(toDelete);
-                                });
-
-
-                                theMessages.add(position, toDelete);
-                                myAdapter.notifyDataSetChanged();//redraw the list
-                            })
-                            .show();
-
-                });
-                builder.create().show(); //this has to be last
+//                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+//                //The AlertDialog gives you two buttons to use, a positive button, and a negative button
+////                Clicking on the No shouldn't delete anything so just leave that lambda function empty
+//
+//                builder.setNegativeButton("No" , (btn, obj)->{ /* if no is clicked */  }  );
+//                builder.setMessage("Do you want to delete this message?");
+//                builder.setTitle("Delete");
+//
+//
+//                builder.setPositiveButton("yes", (p1, p2) -> {
+//                    //add to database on another thread
+//                    Executor thread = Executors.newSingleThreadExecutor();
+//                    /*this runs in another thread*/
+//                    thread.execute(() -> {
+//                        mDao.deleteMessage(toDelete);//get the id from
+//                    });
+//                    theMessages.remove(position);//remove from the array list
+//                    myAdapter.notifyDataSetChanged();//redraw the list
+//
+////give feedback:anything on screen
+//                    Snackbar.make( itemView , "You deleted the row", Snackbar.LENGTH_LONG)
+//                            .setAction("Undo", (btn) -> {
+//                                Executor thread2 = Executors.newSingleThreadExecutor();
+//                                thread2.execute(( ) -> {
+//                                    mDao.insertMessage(toDelete);
+//                                });
+//
+//
+//                                theMessages.add(position, toDelete);
+//                                myAdapter.notifyDataSetChanged();//redraw the list
+//                            })
+//                            .show();
+//
+//                });
+//                builder.create().show(); //this has to be last
 
             });
 
