@@ -206,18 +206,16 @@ public class ChatRoom extends AppCompatActivity {
         TextView time;
 
 
-        /**
-         * Constructs a MyRowHolder with the specified itemView.
-         *
-         * @param entireRow The view for this row holder.
-         */
-        public MyRowHolder(@NonNull View entireRow) {
-            super(entireRow);
-            entireRow.setOnClickListener(clk -> {
 
-                // tell you which row (position) this row is currently in the adapter object
-                int position = getAbsoluteAdapterPosition();
-                ChatMessage toDelete = theMessages.get(position);
+        public MyRowHolder(@NonNull View itemView) {
+            super(itemView);
+            //like onCreate above
+
+            itemView.setOnClickListener( click -> {
+                int rowNum = getAbsoluteAdapterPosition();//which row this is
+
+                ChatMessage selected = theMessages.get(rowNum);
+                chatModel.selectedMessage.postValue(selected);
                 // alert dialog to ask if you want to do this first.
 //                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
 //                //The AlertDialog gives you two buttons to use, a positive button, and a negative button
