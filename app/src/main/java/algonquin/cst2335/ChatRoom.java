@@ -10,6 +10,7 @@ import androidx.room.Room;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -50,6 +51,8 @@ public class ChatRoom extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
+        //initialize the toolbar
+        setSupportActionBar(binding.myToolbar);
 
         //get data from ViewModel
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
@@ -197,6 +200,15 @@ public class ChatRoom extends AppCompatActivity {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override //initialize the toolbar
+    public boolean onCreateOptionsMenu(Menu menu) {
+      super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+
+    }
+
     /**
      * Represents a row holder for displaying chat messages in the RecyclerView.
      */
@@ -259,7 +271,9 @@ public class ChatRoom extends AppCompatActivity {
             message = itemView.findViewById(R.id.messageText);
             time = itemView.findViewById(R.id.timeText); //find the ids from XML to java
 
-        }
+        }//end of onCreate()
+
+
 
 
     }
