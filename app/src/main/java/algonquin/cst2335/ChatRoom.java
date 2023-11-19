@@ -11,9 +11,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -56,7 +58,8 @@ public class ChatRoom extends AppCompatActivity {
 
         //get data from ViewModel
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
-        chatModel.selectedMessage.observe(this, newSelected -> {MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
+        chatModel.selectedMessage.observe(this, newSelected -> {
+            MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
             //to load fragments
             getSupportFragmentManager().beginTransaction().addToBackStack("").replace(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
@@ -202,11 +205,30 @@ public class ChatRoom extends AppCompatActivity {
 
     @Override //initialize the toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
-      super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return true;
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item_1:
+                Snackbar.make(binding.myToolbar, "You Clicked the delete button",
+                        Snackbar.LENGTH_LONG).show();
+                //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
+                //asking if the user wants to delete this message.
+                break;
+
+            case R.id.about_item:
+                Toast.makeText(this, "Version 1.0, created by Lei Luo",
+                        Toast.LENGTH_LONG).show();
+                break;
+        }
+        return true;
     }
 
     /**
@@ -218,12 +240,11 @@ public class ChatRoom extends AppCompatActivity {
         TextView time;
 
 
-
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
             //like onCreate above
 
-            itemView.setOnClickListener( click -> {
+            itemView.setOnClickListener(click -> {
                 int rowNum = getAbsoluteAdapterPosition();//which row this is
 
                 ChatMessage selected = theMessages.get(rowNum);
@@ -272,8 +293,6 @@ public class ChatRoom extends AppCompatActivity {
             time = itemView.findViewById(R.id.timeText); //find the ids from XML to java
 
         }//end of onCreate()
-
-
 
 
     }
