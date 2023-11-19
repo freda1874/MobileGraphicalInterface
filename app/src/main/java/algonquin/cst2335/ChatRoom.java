@@ -37,7 +37,8 @@ public class ChatRoom extends AppCompatActivity {
     RecyclerView.Adapter myAdapter;
 
     ChatMessageDAO mDao;
-
+    int selectedRow;
+    MessageDetailsFragment newFragment;
 
     /**
      * This method is called when the activity is first created.
@@ -59,9 +60,11 @@ public class ChatRoom extends AppCompatActivity {
         //get data from ViewModel
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         chatModel.selectedMessage.observe(this, newSelected -> {
-            MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
+            newFragment = new MessageDetailsFragment(newSelected);
+
+
             //to load fragments
-            getSupportFragmentManager().beginTransaction().addToBackStack("").replace(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
+            getSupportFragmentManager().beginTransaction().addToBackStack("").add(R.id.fragmentLocation, newFragment).commit();// This line actually loads the fragment into the specified FrameLayout
 
         });
 
@@ -217,10 +220,65 @@ public class ChatRoom extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.item_1:
-                Snackbar.make(binding.myToolbar, "You Clicked the delete button",
-                        Snackbar.LENGTH_LONG).show();
+
+
                 //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
                 //asking if the user wants to delete this message.
+//                int rowNum = getAbsoluteAdapterPosition();//which row this is
+
+
+                ChatMessage selected = theMessages.get(this.selectedRow);
+
+////                 alert dialog to ask if you want to do this first.
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+
+                builder.setNegativeButton("No", (btn, obj) -> { /* if no is clicked */ });
+                builder.setMessage("Do you want to delete this message?");
+                builder.setTitle("Delete");
+
+
+                builder.setPositiveButton("yes", (p1, p2) -> {
+                    //add to database on another thread
+                    Executor thread = Executors.newSingleThreadExecutor();
+                    /*this runs in another thread*/
+                    thread.execute(() -> {
+                        mDao.deleteMessage(selected);//get the id from
+                    });
+                    theMessages.remove(this.selectedRow);//remove
+                    // from the
+                    // array list
+                    myAdapter.notifyDataSetChanged();//redraw the list
+                    if (chatModel.selectedMessage.getValue() != null &&
+                            chatModel.selectedMessage.getValue().equals(selected)) {
+                        // Remove the fragment
+                        getSupportFragmentManager().beginTransaction()
+                                .remove(newFragment)
+                                .commit();
+                    }
+//give feedback:anything on screen
+                    Snackbar.make(binding.myToolbar, "You deleted the row", Snackbar.LENGTH_LONG)
+                            .setAction("Undo", (btn) -> {
+                                Executor thread2 = Executors.newSingleThreadExecutor();
+                                thread2.execute(() -> {
+                                    mDao.insertMessage(selected);
+                                });
+
+
+                                theMessages.add(this.selectedRow, selected);
+
+                                myAdapter.notifyDataSetChanged();//redraw the list
+
+
+                            })
+                            .show();
+
+
+                });
+                builder.create().show(); //this has to be last
+                Snackbar.make(binding.myToolbar, "You Clicked the delete button",
+                        Snackbar.LENGTH_LONG).show();
+
+
                 break;
 
             case R.id.about_item:
@@ -249,6 +307,8 @@ public class ChatRoom extends AppCompatActivity {
 
                 ChatMessage selected = theMessages.get(rowNum);
                 chatModel.selectedMessage.postValue(selected);
+//                theMessages.indexOf(selected);
+                selectedRow = rowNum;
                 // alert dialog to ask if you want to do this first.
 //                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
 //                //The AlertDialog gives you two buttons to use, a positive button, and a negative button
