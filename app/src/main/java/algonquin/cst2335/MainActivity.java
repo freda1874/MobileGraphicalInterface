@@ -2,139 +2,119 @@ package algonquin.cst2335;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import algonquin.cst2335.databinding.ActivityMainBinding;
+
 /**
  * This is the main activity class responsible for handling the UI related to password complexity.
- *  @author Lei Luo
- *  @version 1.0
+ *
+ * @author Lei Luo
+ * @version 1.0
  */
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * TextView that displays messages at the center of the screen.
-     */
-    private TextView tv;
-    /**
-     * EditText field for user to input their password.
-     */
-    private EditText et;
-    /**
-     * Button to initiate the password complexity check.
-     */
-    private Button btn;
+
+    protected String cityName;
+
+    protected RequestQueue queue = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        tv =findViewById(R.id.textView);
-         et = findViewById(R.id.editText);
-          btn=findViewById(R.id.button);
+        queue = Volley.newRequestQueue(this);
+
+        ActivityMainBinding binding =
+                ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
 
 //         Button click listener to check the complexity of the entered password.
 
-        btn.setOnClickListener(clk ->{
-            String password =et.getText().toString();
+        binding.forecastButton.setOnClickListener(clk -> {
 
-       if( checkPasswordComplexity(password)){
-           tv.setText("Your password meets the requirements");
-       }else   tv.setText("You shall not pass!") ;
-    }
+
+                    try {
+                        cityName =
+                                URLEncoder.encode(binding.cityTextField.getText().toString(),
+                                        "UTF-8");
+
+
+                        String stringURL = "https://api.openweathermap.org/data/2" +
+                                ".5/weather?q=" + cityName +
+                                "&appid=7e943c97096a9784391a981c4d878b22&units=metric";
+
+
+                        JsonObjectRequest request = new
+                                JsonObjectRequest(Request.Method.GET, stringURL,
+                                null, (response) -> {
+                            try {
+                                JSONObject position0 =
+                                        response.getJSONArray("weather").getJSONObject(0);
+                                String description = position0.getString("description");
+                                String iconName = position0.getString("icon");
+                                JSONObject mainObject = response.getJSONObject("main");
+                                double current = mainObject.getDouble("temp");
+                                double min = mainObject.getDouble("temp_min");
+                                double max = mainObject.getDouble("temp_max");
+                                int humidity = mainObject.getInt("humidity");
+
+
+//second query for the image
+                                String imageURL = "http://openweathermap" + ".org/img/w/" + iconName + ".png";
+                                ImageRequest imgReq =
+                                        new ImageRequest(imageURL,
+                                                new Response.Listener<Bitmap>() {
+                                                    public void onResponse(Bitmap bitmap) {
+                                                        binding.weatherImage.setImageBitmap(bitmap);
+                                                        Log.d("MainActivity", "Image size: " + bitmap.getWidth() + "x" + bitmap.getHeight());
+                                                    }
+                                                }, 1024, 1024,
+                                                ImageView.ScaleType.FIT_CENTER, null, (error) -> {
+                                            Log.e("MainActivity", "Image request error: " + error.getMessage());
+                                        });
+                                queue.add(imgReq);
+
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        }, (error) -> {  /*this gets called if the
+                             server responded*/
+                        });
+                        queue.add(request);
+
+
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
         );
     }
 
-    /**
-     * Checks if the given character is a special character.
-     *
-     * @param c The character to check.
-     * @return true if it is a special character, false otherwise.
-     */
-    boolean isSpecialCharacter(char c){
-        switch (c){
-            case '#':
-            case '?':
-            case '*':
-            case '%':
-            case '^':
-            case '&':
-            case '$':
-            case '!':
-            case '@':
-                return true;
-            default:
-                return false;
 
-        }
-    }
-    /**
-     * Checks the complexity of the given password string.
-     *
-     * @param pw The password string to check.
-     * @return Returns true if the password meets all complexity requirements, false otherwise.
-     */
-    boolean checkPasswordComplexity(String pw){
-        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
-
-        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
-
-
-        for(int i=0;i<  pw.length(); i++){
-            char currentchar=pw.charAt(i);
-            if(Character.isUpperCase(currentchar)){
-                foundUpperCase=true; 
-            } else if (Character.isLowerCase(currentchar)) {
-                foundLowerCase=true;
-            }else if(Character.isDigit(currentchar)){
-                foundNumber=true;
-            } else if (isSpecialCharacter(currentchar)) {
-                foundSpecial=true;
-                
-            }
-        }
-
-
-        if(!foundUpperCase)
-        {
-            Toast.makeText(this, "Missing an uppercase letter", Toast.LENGTH_SHORT).show();
-
-            return false;
-
-        }
-
-        else if( !foundLowerCase)
-        {
-
-            Toast.makeText(this, "Missing an lower case letter", Toast.LENGTH_SHORT).show();
-
-
-            return false;
-
-        }
-
-        else if( !foundNumber)
-        {
-
-            Toast.makeText(this, "Missing a number ", Toast.LENGTH_SHORT).show();
-
-
-            return false;
-
-        }
-
-        else if(!foundSpecial) {   Toast.makeText(this, "Missing a special character ",
-                Toast.LENGTH_SHORT).show();
-
-
-            return false; }
-
-        else
-
-            return true; //only get here if they're all true
-
-}
 }

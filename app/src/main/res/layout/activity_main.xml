@@ -4,25 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+   >
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Type your Password:"
+        android:text="type in the name of a city"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11" />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/cityTextField"
+        android:layout_width="201dp"
+        android:layout_height="62dp"
         android:layout_marginTop="24dp"
-        android:hint="Uppercase letter + lowercase letter + number + special symbol"
-        android:inputType="textPassword"
+
+        android:hint="Type city name here"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:textSize="12sp"
@@ -31,17 +34,29 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/forecastButton"
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="300dp"
-        android:text="LOGIN"
+        android:layout_marginTop="136dp"
+        android:text="Get Forecast"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageView
+        android:id="@+id/weatherImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
