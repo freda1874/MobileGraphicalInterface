@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
@@ -10,96 +10,116 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="52dp"
         android:text="type in the name of a city"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/cityTextField"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/cityTextField"
         android:layout_width="201dp"
         android:layout_height="62dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="56dp"
         android:hint="Type city name here"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="127dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/forecastButton"
-        android:layout_width="wrap_content"
+        android:layout_width="104dp"
 
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
 
         android:text="Get Forecast"
+        app:layout_constraintBottom_toBottomOf="@+id/cityTextField"
 
-        tools:layout_editor_absoluteX="278dp"
-        tools:layout_editor_absoluteY="130dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cityTextField" />
 
     <ImageView
         android:id="@+id/weatherImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginBottom="28dp"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/humidity"
-        tools:layout_editor_absoluteY="474dp" />
+        app:layout_constraintBottom_toTopOf="@+id/description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/humidity"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:text="TextView"
         android:textSize="15sp"
+
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/minTemp"
-        tools:layout_editor_absoluteY="429dp" />
+        app:layout_constraintBottom_toTopOf="@+id/weatherImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-
+        android:layout_marginBottom="292dp"
         android:textSize="15sp"
+        android:text="TextView"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/weatherImage"
-        tools:layout_editor_absoluteY="602dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/maxTemp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:text="TextView"
-
-        android:textSize="15sp"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/temp"
-        tools:layout_editor_absoluteY="329dp" />
+        app:layout_constraintBottom_toTopOf="@+id/minTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="15sp"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/minTemp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
         android:text="TextView"
-        android:textSize="15sp"
         android:visibility="invisible"
-
-        app:layout_constraintStart_toStartOf="@+id/maxTemp"
-        tools:layout_editor_absoluteY="381dp" />
+        app:layout_constraintBottom_toTopOf="@+id/humidity"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="15sp"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/temp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_marginBottom="32dp"
         android:textSize="15sp"
+        android:text="TextView"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/maxTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="277dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
