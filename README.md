@@ -16,8 +16,8 @@ Users can listen to these songs, create personalized collections by saving them 
   ![Android2](https://github.com/user-attachments/assets/f742ad77-9805-4895-bb26-a1886deb58e0)
 
 - **Listen to Tracks**: Users can listen to the songs directly within the app.
+  
   ![Android2](https://github.com/user-attachments/assets/c8d16602-7cae-4b9c-9782-96add1097590)
-
 - **Personalized Collections**: Users can save their favorite songs to a personalized list and manage the list with CRUD operations.
 
   ![Android4](https://github.com/user-attachments/assets/31288019-a11d-4871-9399-d9ef32a951c9)
